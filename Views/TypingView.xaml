@@ -1,0 +1,135 @@
+<UserControl x:Class="Digitamentos.Views.TypingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:converters="clr-namespace:Digitamentos.Converters"
+             Focusable="True" Loaded="UserControl_Loaded"
+             PreviewTextInput="UserControl_PreviewTextInput"
+             PreviewKeyDown="UserControl_PreviewKeyDown">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <converters:EnumToBooleanConverter x:Key="EnumToBool"/>
+        <converters:MathConverter x:Key="MathConverter"/>
+
+        <Style x:Key="InlineRadioStyle" TargetType="RadioButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="PillBorder" CornerRadius="6" Padding="15,6" Margin="4" BorderThickness="0,0,0,2" BorderBrush="Transparent" Background="Transparent">
+                            <TextBlock x:Name="PillText" Text="{TemplateBinding Content}" 
+                                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" 
+                                       FontSize="14" Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="PillBorder" Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
+                                <Setter TargetName="PillText" Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="PillBorder" Property="BorderBrush" Value="{DynamicResource TypingCursorBrush}" />
+                                <Setter TargetName="PillText" Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+                                <Setter TargetName="PillText" Property="FontWeight" Value="Bold" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Topo (Painel de Configuração) com Fade Out -->
+        <Grid Grid.Row="0" Margin="0,20,0,20">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Opacity" Value="1"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsTestStarted}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.3"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.3"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                <!-- Modo -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <RadioButton Content="aleatório" Style="{StaticResource InlineRadioStyle}" IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBool}, ConverterParameter=Random}"/>
+                    <RadioButton Content="real (IA)" Style="{StaticResource InlineRadioStyle}" IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBool}, ConverterParameter=RealText}"/>
+                    <RadioButton Content="código (IA)" Style="{StaticResource InlineRadioStyle}" IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBool}, ConverterParameter=Code}"/>
+                </StackPanel>
+                
+                <!-- Tamanho -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                    <RadioButton Content="curto" Style="{StaticResource InlineRadioStyle}" IsChecked="{Binding SelectedLength, Converter={StaticResource EnumToBool}, ConverterParameter=Short}"/>
+                    <RadioButton Content="médio" Style="{StaticResource InlineRadioStyle}" IsChecked="{Binding SelectedLength, Converter={StaticResource EnumToBool}, ConverterParameter=Medium}"/>
+                    <RadioButton Content="longo" Style="{StaticResource InlineRadioStyle}" IsChecked="{Binding SelectedLength, Converter={StaticResource EnumToBool}, ConverterParameter=Long}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0"
+                            IsEnabled="{Binding IsDifficultyEnabled}"
+                            Opacity="{Binding DifficultyOpacity}">
+                    <!-- Dificuldade -->
+                    <RadioButton Content="{Binding DifficultyBasicLabel}" Style="{StaticResource InlineRadioStyle}" IsChecked="{Binding SelectedDifficulty, Converter={StaticResource EnumToBool}, ConverterParameter=Basic}"/>
+                    <RadioButton Content="{Binding DifficultyHardLabel}" Style="{StaticResource InlineRadioStyle}" IsChecked="{Binding SelectedDifficulty, Converter={StaticResource EnumToBool}, ConverterParameter=Hard}"/>
+                    
+                    <!-- Language Combo for Code -->
+                    <ComboBox ItemsSource="{Binding AvailableLanguages}" SelectedItem="{Binding SelectedLanguage}" Margin="20,0,0,0" Width="120" Visibility="{Binding IsLanguageSelectionVisible, Converter={StaticResource BoolToVis}}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        
+        <ui:ProgressRing Grid.Row="1" IsActive="{Binding IsLoading}" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="10"/>
+        
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="900" Margin="20">
+                <TextBlock x:Name="DisplayTextBlock" 
+                           FontSize="{Binding MainViewModel.Settings.FontSize}" 
+                           FontFamily="{Binding MainViewModel.Settings.FontFamily}"
+                           TextWrapping="Wrap" 
+                           LineHeight="{Binding MainViewModel.Settings.FontSize, Converter={StaticResource MathConverter}, ConverterParameter=@VALUE*1.6}"
+                           Padding="10"
+                           Margin="0,0,0,20"/>
+                
+                <Canvas x:Name="CursorCanvas" IsHitTestVisible="False">
+                    <Rectangle x:Name="AnimatedCursor" 
+                            Fill="{DynamicResource TypingCursorBrush}" 
+                            Width="2" Height="30">
+                        <Rectangle.RenderTransform>
+                            <TranslateTransform x:Name="CursorTransform" X="0" Y="0"/>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                </Canvas>
+            </Grid>
+        </ScrollViewer>
+
+        <!-- Footer -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,20">
+            <Button Content="↺" Command="{Binding RestartCommand}" 
+                    FontSize="22" Padding="14,6" Margin="8,0" ToolTip="Reiniciar (mesmo texto)"
+                    Background="Transparent" BorderThickness="0" Cursor="Hand" Focusable="False"/>
+            <Button Content="⇄" Command="{Binding NewTextCommand}" 
+                    FontSize="22" Padding="14,6" Margin="8,0" ToolTip="Trocar texto"
+                    Background="Transparent" BorderThickness="0" Cursor="Hand" Focusable="False"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
