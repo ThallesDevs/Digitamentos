@@ -34,7 +34,7 @@
 
 1. Clone o repositório em sua máquina:
 ```bash
-git clone https://github.com/SeuUsuario/Digitamentos.git
+git clone https://github.com/ThallesDevs/Digitamentos.git
 ```
 2. Abra a pasta do projeto:
 ```bash
