@@ -63,14 +63,6 @@
                         <TextBlock Text="Cor do Texto Customizada (Hex)"/>
                         <TextBox Text="{Binding Settings.CustomForegroundHex}" ui:ControlHelper.PlaceholderText="#D4D4D4" Margin="0,0,0,15"/>
 
-                        <TextBlock Text="Inteligência Artificial" FontSize="20" FontWeight="Bold" Margin="0,20,0,10"/>
-                        
-                        <TextBlock Text="API Key do Gemini"/>
-                        <TextBox Text="{Binding GeminiApiKey, UpdateSourceTrigger=PropertyChanged}" 
-                                 ui:ControlHelper.PlaceholderText="Cole sua API Key aqui" Margin="0,0,0,5"/>
-                        <TextBlock Text="Sem chave = modo offline (textos locais)" FontSize="11" 
-                                   Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" Margin="0,0,0,15"/>
-
                         <Button Content="Salvar &amp; Aplicar" Command="{Binding ApplySettingsCommand}" Style="{StaticResource AccentButtonStyle}" HorizontalAlignment="Stretch" Margin="0,20,0,0"/>
                     </StackPanel>
                 </ScrollViewer>

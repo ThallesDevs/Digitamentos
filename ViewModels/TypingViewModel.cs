@@ -132,29 +132,12 @@ namespace Digitamentos.ViewModels
 
         public string DifficultyBasicLabel => SelectedMode == TextMode.RealText ? "básico (não aplicável)" : "básico";
         public string DifficultyHardLabel => SelectedMode == TextMode.RealText ? "avançado (não aplicável)" : "avançado";
-
-        public string ActiveModelLabel => string.IsNullOrWhiteSpace(ApiKey) ? "📦 offline" : "⚡ Gemini";
-
         private string _selectedLanguage = "C#";
         public string SelectedLanguage
         {
             get => _selectedLanguage;
             set => SetProperty(ref _selectedLanguage, value);
         }
-
-        private string _apiKey = "";
-        public string ApiKey
-        {
-            get => _apiKey;
-            set
-            {
-                if (SetProperty(ref _apiKey, value))
-                {
-                    OnPropertyChanged(nameof(ActiveModelLabel));
-                }
-            }
-        }
-
         // Typing State
         private Stopwatch _stopwatch;
         private DispatcherTimer _timer;
@@ -282,10 +265,7 @@ namespace Digitamentos.ViewModels
             }
             else
             {
-                if (string.IsNullOrWhiteSpace(ApiKey))
-                    textProvider = new OfflineTextGenerator();
-                else
-                    textProvider = new GeminiTextGenerator(ApiKey);
+                textProvider = new OfflineTextGenerator();
             }
 
             TargetText = await textProvider.GenerateTextAsync(SelectedMode, SelectedLength, SelectedDifficulty, SelectedLanguage);
