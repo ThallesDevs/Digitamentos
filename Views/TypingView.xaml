@@ -74,8 +74,8 @@
                 <!-- Modo -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <RadioButton Content="aleatório" Style="{StaticResource InlineRadioStyle}" IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBool}, ConverterParameter=Random}"/>
-                    <RadioButton Content="real (IA)" Style="{StaticResource InlineRadioStyle}" IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBool}, ConverterParameter=RealText}"/>
-                    <RadioButton Content="código (IA)" Style="{StaticResource InlineRadioStyle}" IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBool}, ConverterParameter=Code}"/>
+                    <RadioButton Content="real" Style="{StaticResource InlineRadioStyle}" IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBool}, ConverterParameter=RealText}"/>
+                    <RadioButton Content="código" Style="{StaticResource InlineRadioStyle}" IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBool}, ConverterParameter=Code}"/>
                 </StackPanel>
                 
                 <!-- Tamanho -->
