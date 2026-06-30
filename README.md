@@ -49,12 +49,6 @@ dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true -p:IncludeNativeL
 dotnet run -c Release
 ```
 
-## ⚙️ Configurando a IA (Opcional)
-Para habilitar a geração de textos dinâmica baseada em IA:
-1. Abra a aplicação.
-2. Acesse o menu lateral de **Configurações**.
-3. Insira sua chave de API do **Google Gemini** (Gere uma gratuitamente no [Google AI Studio](https://aistudio.google.com/)).
-4. Sem a chave, o app vai realizar o *fallback* para o gerador dinâmico de textos nativo `OfflineTextGenerator`.
 
 ## 🤝 Contribuições
 Contribuições são super bem-vindas! Se você tem ideias para novos modos de treino de digitação, gráficos extras, ou otimizações, fique à vontade para abrir uma *Issue* ou submeter um *Pull Request*.
